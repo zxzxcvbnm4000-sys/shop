@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>حسابات المحل</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1f4f1;--card:#fff;--ink:#14231f;--mute:#5b6b65;--line:#d6ded9;--gain:#0b7a4b;--loss:#b3261e;--field:#f6f9f6;--btn:#14231f;--btn-ink:#f1f4f1;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1815;--card:#17221e;--ink:#e8f0ec;--mute:#93a59d;--line:#2a3a34;--gain:#4cd08e;--loss:#ff8a80;--field:#101a16;--btn:#e8f0ec;--btn-ink:#0f1815;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1815;--card:#17221e;--ink:#e8f0ec;--mute:#93a59d;--line:#2a3a34;--gain:#4cd08e;--loss:#ff8a80;--field:#101a16;--btn:#e8f0ec;--btn-ink:#0f1815;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic",Tahoma,Arial,sans-serif;font-size:16px;line-height:1.5}
+main{max-width:520px;margin:0 auto;padding:16px 16px 96px}
+section{display:none}section.on{display:block}
+h2{font-size:20px;margin:4px 0 14px}
+input[type=date],input[type=month]{width:100%;font:inherit;font-size:17px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);margin-bottom:14px}
+.hero{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+.lbl{color:var(--mute);font-size:14px}
+.big{font-size:46px;font-weight:700;line-height:1.2;margin:2px 0 8px;direction:ltr;text-align:right}
+.gain{color:var(--gain)}.loss{color:var(--loss)}
+.sub{display:flex;gap:18px;color:var(--mute);font-size:14px;flex-wrap:wrap}
+.sub b{color:var(--ink);font-weight:500;margin-inline-start:4px}
+.hint{color:var(--mute);font-size:13px;margin-top:8px;min-height:1em}
+.note{font-size:13px;color:var(--mute);margin:0 2px 10px}
+.row{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
+.rh{display:flex;justify-content:space-between;align-items:center;font-weight:500;margin-bottom:8px}
+.rh b{direction:ltr;font-weight:700;color:var(--mute)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pair label{font-size:13px;color:var(--mute);display:block}
+.pair input{display:block;width:100%;margin-top:4px;font:inherit;font-size:19px;font-weight:500;padding:11px 8px;border:1px solid var(--line);border-radius:10px;background:var(--field);color:var(--ink);direction:ltr;text-align:center}
+input:focus-visible,button:focus-visible{outline:2px solid var(--gain);outline-offset:2px}
+.btn{width:100%;font:inherit;font-size:18px;font-weight:700;padding:15px;border:0;border-radius:12px;background:var(--btn);color:var(--btn-ink);margin-top:6px}
+.btn:disabled{opacity:.35}
+.item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.item .t{flex:1;cursor:pointer}.item .t small{display:block;color:var(--mute);font-size:13px}
+.item .p{font-weight:700;font-size:18px;direction:ltr}
+.del{font:inherit;font-size:13px;background:none;border:1px solid var(--line);color:var(--mute);border-radius:8px;padding:6px 10px}
+.del.ask{border-color:var(--loss);color:var(--loss)}
+.mon{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
+.mon .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.mon .top span{font-weight:700;font-size:17px}.mon .top b{font-size:26px;direction:ltr}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;color:var(--mute);font-size:14px}
+.grid b{display:block;color:var(--ink);font-weight:500;font-size:15px}
+.empty{color:var(--mute);text-align:center;padding:40px 10px}
+nav{position:fixed;inset:auto 0 0 0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;font:inherit;font-size:16px;font-weight:500;padding:15px 4px;background:none;border:0;color:var(--mute)}
+nav button.on{color:var(--ink);font-weight:700;box-shadow:inset 0 3px 0 var(--gain)}
+#toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--btn);color:var(--btn-ink);padding:10px 18px;border-radius:10px;font-size:15px;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.on{opacity:1}
+.alert{background:var(--btn);color:var(--btn-ink);border-radius:12px;padding:12px 14px;margin-bottom:12px;font-weight:500}
+.alert:empty{display:none}
+.neg{border-color:var(--loss)}
+section.go{animation:slide .22s ease-out}
+@keyframes slide{from{opacity:0;transform:translateX(var(--dx,24px))}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){section.go{animation:none}}
+.chart{display:flex;align-items:flex-end;gap:3px;height:80px;margin-bottom:12px}
+.chart i{flex:1;border-radius:3px 3px 0 0;background:var(--gain)}.chart i.ng{background:var(--loss)}
+.nm{display:block;width:100%;font:inherit;font-size:17px;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--field);color:var(--ink);margin-bottom:8px}
+#lock{display:none}#lock.on{display:flex;position:fixed;inset:0;background:var(--bg);z-index:9;align-items:center;justify-content:center;padding:24px}#lock>div{width:100%;max-width:320px}
+</style>
+</head>
+<body>
+<main>
+<section id="today" class="on"></section>
+<section id="history"></section>
+<section id="monthly"></section>
+<section id="settings"></section>
+</main>
+<nav>
+<button data-tab="today" class="on">اليوم</button>
+<button data-tab="history">السجل</button>
+<button data-tab="monthly">الشهري</button>
+<button data-tab="settings">الإعدادات</button>
+</nav>
+<div id="lock"></div>
+<div id="toast"></div>
+<script>
+let NAMES=['ماكينة 1','ماكينة 2','ماكينة 3','الدرج','محفظة 1','محفظة 2'];
+try{const sn=JSON.parse(localStorage.getItem('shop-names-v1')||'null');if(Array.isArray(sn)&&sn.length)NAMES=sn}catch(e){}
+const saveNames=()=>{try{localStorage.setItem('shop-names-v1',JSON.stringify(NAMES))}catch(e){}};
+const pad=a=>{const r=a.map(String);while(r.length<NAMES.length)r.push('');return r};
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const sha=async s=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode('shop'+s)))].map(b=>b.toString(16).padStart(2,'0')).join('');
+const KEY='shop-days-v1';
+let days={};
+try{days=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){days={}}
+const $=s=>document.querySelector(s);
+const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(days))}catch(e){toast('تعذر الحفظ في المتصفح')}};
+const fmt=n=>n.toLocaleString('en-US',{maximumFractionDigits:2});
+const sgn=n=>(n>0?'+':n<0?'−':'')+fmt(Math.abs(n));
+const cls=n=>n>0?'gain':n<0?'loss':'';
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const toD=s=>{const p=s.split('-').map(Number);return new Date(p[0],p[1]-1,p[2])};
+const dLabel=s=>toD(s).toLocaleDateString('ar-EG-u-nu-latn',{weekday:'long',day:'numeric',month:'long'});
+const num=a=>sum(a.map(Number));
+const done=r=>r.s.every(v=>v!=='')&&r.e.every(v=>v!=='');
+const dayProfit=r=>num(r.e)-num(r.s)+Number(r.w||0)-Number(r.i||0)-Number(r.x||0);
+const tf=t=>t?new Date(t).toLocaleTimeString('ar-EG-u-nu-latn',{hour:'numeric',minute:'2-digit'}):'';
+const tline=r=>{const a=[];if(r.st)a.push('بداية '+tf(r.st));if(r.et)a.push('نهاية '+tf(r.et));return a.join('، ')};
+const biz=()=>{const n=new Date();if(n.getHours()<5)n.setDate(n.getDate()-1);return ymd(n)};
+let cur=biz(),vals,note='',pendingDel=null,mSel='';
+
+function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('on');setTimeout(()=>el.classList.remove('on'),1800)}
+
+function loadDate(){
+  note='';
+  if(days[cur]){vals={s:pad(days[cur].s),e:pad(days[cur].e),w:String(days[cur].w||''),i:String(days[cur].i||''),x:String(days[cur].x||'')};if(!done(days[cur]))note='بداية اليوم محفوظة. اكتب النهاية آخر اليوم واضغط حفظ.';return}
+  vals={s:Array(NAMES.length).fill(''),e:Array(NAMES.length).fill(''),w:'',i:'',x:''};
+  const prev=Object.keys(days).filter(d=>d<cur&&days[d].e.every(v=>v!=='')).sort().pop();
+  if(prev){vals.s=pad(days[prev].e);note='البداية اتملت من نهاية '+dLabel(prev)+'، عدّلها لو مختلفة.'}
+}
+
+function setAlert(){
+  const el=$('#alert');if(!el)return;
+  const h=new Date().getHours(),b=biz();
+  const open=Object.keys(days).filter(d=>d<b&&!done(days[d])).sort()[0];
+  let t='';
+  if(open)t='في يوم لسه ما اتقفلش: '+dLabel(open)+'. افتحه من السجل واكتب النهاية.';
+  else if(days[b]&&!done(days[b])&&h>=1&&h<5)t='جه وقت قفل اليوم. اكتب أرقام النهاية واحفظ.';
+  else if(!days[b]&&(h>=11||h<5))t='جه وقت بداية اليوم. اكتب أرقام البداية واحفظ.';
+  el.textContent=t;
+}
+setInterval(setAlert,60000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)setAlert()});
+
+function buildToday(){
+  $('#today').innerHTML=
+   '<input type="date" id="dt" value="'+cur+'">'+
+   '<div class="alert" id="alert"></div>'+
+   '<div class="hero"><div class="lbl">ربح اليوم</div><div class="big" id="profit">—</div>'+
+   '<div class="sub"><span>أول اليوم<b id="ts">0</b></span><span>آخر اليوم<b id="te">0</b></span></div>'+
+   '<div class="hint" id="hint"></div></div>'+
+   '<div class="note">'+note+'</div>'+(days[cur]&&tline(days[cur])?'<div class="note">وقت التسجيل: '+tline(days[cur])+'</div>':'')+
+   NAMES.map((n,i)=>'<div class="row"><div class="rh"><span>'+n+'</span><b id="d'+i+'">—</b></div>'+
+    '<div class="pair"><label>بداية<input type="number" inputmode="decimal" step="any" data-k="s" data-i="'+i+'" value="'+vals.s[i]+'"></label>'+
+    '<label>نهاية<input type="number" inputmode="decimal" step="any" data-k="e" data-i="'+i+'" value="'+vals.e[i]+'"></label></div></div>').join('')+
+   '<div class="row"><div class="rh"><span>تعديلات اليوم</span></div><div class="pair" style="grid-template-columns:repeat(3,1fr)">'+
+    [['w','سحبت من المحل'],['i','أودعت في المحل'],['x','مصروفات']].map(f=>'<label>'+f[1]+'<input type="number" inputmode="decimal" step="any" data-k="'+f[0]+'" value="'+vals[f[0]]+'"></label>').join('')+'</div></div>'+
+   '<button class="btn" id="save">حفظ اليوم</button>';
+  update();setAlert();
+}
+
+function update(){
+  const ts=sum(vals.s.map(Number)),te=sum(vals.e.map(Number)),adj=Number(vals.w||0)-Number(vals.i||0)-Number(vals.x||0);
+  const allS=vals.s.every(v=>v!==''),allE=vals.e.every(v=>v!=='');
+  $('#ts').textContent=fmt(ts);$('#te').textContent=fmt(te);
+  vals.s.forEach((s,i)=>{
+    const el=$('#d'+i),e=vals.e[i];
+    if(s!==''&&e!==''){const d=Number(e)-Number(s);el.textContent=sgn(d);el.className=cls(d)}
+    else{el.textContent='—';el.className=''}
+  });
+  const p=$('#profit');
+  if(allS&&allE){const d=te-ts+adj;p.textContent=sgn(d);p.className='big '+cls(d)}
+  else{p.textContent='—';p.className='big'}
+  const miss=vals.e.filter(v=>v==='').length;
+  $('#hint').textContent=!allS?'اكتب مبلغ البداية لكل البنود':!allE?'لسه فاضل '+miss+' خانة نهاية. تقدر تحفظ دلوقتي وتكمل آخر اليوم.':(te-ts+adj<0?'اليوم فيه عجز. راجع الأرقام.':'');
+  const b=$('#save');b.disabled=!allS;b.textContent=allE?(days[cur]&&done(days[cur])?'تحديث اليوم':'حفظ اليوم'):(vals.e.some(v=>v!=='')?'حفظ وإكمال النهاية بعدين':'حفظ بداية اليوم');
+}
+
+$('#today').addEventListener('input',e=>{
+  const t=e.target;if(t.dataset&&t.dataset.k){if(t.dataset.i===undefined)vals[t.dataset.k]=t.value;else vals[t.dataset.k][+t.dataset.i]=t.value;update()}
+});
+$('#today').addEventListener('change',e=>{
+  if(e.target.id==='dt'&&e.target.value){cur=e.target.value;loadDate();buildToday()}
+});
+$('#today').addEventListener('click',e=>{
+  if(e.target.id==='save'){
+    const full=vals.e.every(v=>v!=='');const old=days[cur],now=new Date().toISOString(),anyE=vals.e.some(v=>v!=='');days[cur]={s:vals.s.slice(),e:vals.e.slice(),w:vals.w,i:vals.i,x:vals.x,st:old&&old.st&&old.s.join()===vals.s.join()?old.st:now,et:anyE?(old&&old.et&&old.e.join()===vals.e.join()?old.et:now):null};persist();note=full?'':'بداية اليوم محفوظة. اكتب النهاية آخر اليوم واضغط حفظ.';buildToday();toast(full?'تم حفظ اليوم':'تم حفظ البداية. كمّل النهاية آخر اليوم')
+  }
+});
+
+function renderHistory(){
+  const keys=Object.keys(days).sort().reverse();
+  $('#history').innerHTML='<h2>السجل</h2>'+(keys.length?keys.map(d=>{
+    const ok=done(days[d]),p=ok?dayProfit(days[d]):0;
+    return '<div class="item'+(ok&&p<0?' neg':'')+'"><div class="t" data-edit="'+d+'">'+dLabel(d)+'<small>'+(ok&&p<0?'عجز. ':'')+(tline(days[d])?tline(days[d])+'. ':'')+(ok?'اضغط للتعديل':'النهاية لسه ما اتسجلتش. اضغط للإكمال')+'</small></div>'+
+     '<div class="p '+(ok?cls(p):'')+'">'+(ok?sgn(p):'مفتوح')+'</div>'+
+     '<button class="del'+(pendingDel===d?' ask':'')+'" data-del="'+d+'">'+(pendingDel===d?'تأكيد المسح':'مسح')+'</button></div>';
+  }).join(''):'<div class="empty">لسه مفيش أيام متسجلة. سجل أول يوم من تبويب اليوم.</div>');
+}
+$('#history').addEventListener('click',e=>{
+  const ed=e.target.closest('[data-edit]'),dl=e.target.closest('[data-del]');
+  if(ed){cur=ed.dataset.edit;loadDate();buildToday();setTab('today')}
+  else if(dl){
+    const d=dl.dataset.del;
+    if(pendingDel===d){delete days[d];pendingDel=null;persist();toast('تم المسح')}else pendingDel=d;
+    renderHistory();
+  }
+});
+
+function renderMonthly(){
+  const m={};
+  Object.keys(days).sort().filter(d=>done(days[d])).forEach(d=>{(m[d.slice(0,7)]=m[d.slice(0,7)]||[]).push([d,dayProfit(days[d])])});
+  const ks=Object.keys(m).sort().reverse().filter(k=>!mSel||k===mSel);
+  if(!ks.length){$('#monthly').innerHTML='<h2>الإحصاء الشهري</h2><input type="month" id="mp" value="'+mSel+'"><div class="empty">مفيش أيام مقفولة في الفترة دي.</div>';return}
+  const all=[].concat(...ks.map(k=>m[k])),tot=sum(all.map(x=>x[1]));
+  let h='<h2>الإحصاء الشهري</h2><input type="month" id="mp" value="'+mSel+'"><div class="hero"><div class="lbl">'+(mSel?'إجمالي الشهر':'إجمالي كل الشهور')+'</div><div class="big '+cls(tot)+'">'+sgn(tot)+'</div>'+
+   '<div class="sub"><span>عدد الأيام<b>'+all.length+'</b></span><span>متوسط اليوم<b>'+sgn(tot/all.length)+'</b></span></div></div>';
+  const ch=all.slice().sort((a,b)=>a[0]<b[0]?-1:1).slice(-30),mx=Math.max(1,...ch.map(x=>Math.abs(x[1])));
+  h+='<div class="chart">'+ch.map(x=>'<i class="'+(x[1]<0?'ng':'')+'" style="height:'+Math.max(4,Math.abs(x[1])/mx*100)+'%"></i>').join('')+'</div>';
+  ks.forEach(k=>{
+    const a=m[k],t=sum(a.map(x=>x[1])),best=a.reduce((x,y)=>y[1]>x[1]?y:x),worst=a.reduce((x,y)=>y[1]<x[1]?y:x);
+    const p=k.split('-').map(Number),name=new Date(p[0],p[1]-1,1).toLocaleDateString('ar-EG-u-nu-latn',{month:'long',year:'numeric'});
+    h+='<div class="mon"><div class="top"><span>'+name+'</span><b class="'+cls(t)+'">'+sgn(t)+'</b></div><div class="grid">'+
+     '<div>عدد الأيام<b>'+a.length+'</b></div><div>متوسط اليوم<b>'+sgn(t/a.length)+'</b></div>'+
+     '<div>أحسن يوم<b>'+Number(best[0].slice(8))+' ← '+sgn(best[1])+'</b></div>'+
+     '<div>أضعف يوم<b>'+Number(worst[0].slice(8))+' ← '+sgn(worst[1])+'</b></div></div></div>';
+    if(mSel)h+=a.map(x=>'<div class="item'+(x[1]<0?' neg':'')+'"><div class="t">'+dLabel(x[0])+'</div><div class="p '+cls(x[1])+'">'+sgn(x[1])+'</div></div>').join('');
+  });
+  $('#monthly').innerHTML=h;
+}
+
+const TABS=['today','history','monthly','settings'];let curTab='today';
+function setTab(t){
+  const dir=TABS.indexOf(t)>TABS.indexOf(curTab)?1:-1;curTab=t;
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
+  document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===t));
+  if(t==='history'){pendingDel=null;renderHistory()}
+  if(t==='monthly')renderMonthly();
+  if(t==='settings')renderSettings();
+  if(t==='today')buildToday();
+  window.scrollTo(0,0);
+  const sc=document.getElementById(t);sc.style.setProperty('--dx',(dir*-28)+'px');sc.classList.remove('go');void sc.offsetWidth;sc.classList.add('go');
+}
+document.querySelector('nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setTab(b.dataset.tab)});
+
+$('#monthly').addEventListener('change',e=>{if(e.target.id==='mp'){mSel=e.target.value;renderMonthly()}});
+function renderSettings(){
+  $('#settings').innerHTML='<h2>الإعدادات</h2><div class="row"><div class="rh"><span>أسماء البنود</span></div>'+NAMES.map((n,i)=>'<input class="nm" data-n="'+i+'" value="'+esc(n)+'">').join('')+'<button class="btn" id="addn">إضافة بند</button></div>'+
+   '<div class="row"><div class="rh"><span>كلمة السر</span></div><input class="nm" id="pw" type="password" inputmode="numeric" placeholder="4 أرقام أو أكتر"><button class="btn" id="setpw">حفظ كلمة السر</button><button class="del" id="clrpw" style="margin-top:10px">إلغاء كلمة السر</button></div>';
+}
+$('#settings').addEventListener('change',e=>{const t=e.target;if(t.dataset.n!==undefined){NAMES[+t.dataset.n]=t.value.trim()||NAMES[+t.dataset.n];saveNames()}});
+$('#settings').addEventListener('click',async e=>{
+  const id=e.target.id;
+  if(id==='addn'){if(NAMES.length>=12)return toast('الحد الأقصى 12 بند');NAMES.push('بند '+(NAMES.length+1));vals.s.push('');vals.e.push('');saveNames();renderSettings()}
+  else if(id==='setpw'){const v=$('#pw').value;if(v.length<4)return toast('كلمة السر 4 أرقام على الأقل');try{localStorage.setItem('shop-pw-v1',await sha(v));toast('تم حفظ كلمة السر')}catch(err){toast('تعذر الحفظ')}}
+  else if(id==='clrpw'){try{localStorage.removeItem('shop-pw-v1')}catch(err){}toast('اتلغت كلمة السر')}
+});
+function lockCheck(){
+  let h=null;try{h=localStorage.getItem('shop-pw-v1')}catch(e){}
+  if(!h)return;
+  const L=$('#lock');L.className='on';L.innerHTML='<div><h2>أدخل كلمة السر</h2><input class="nm" id="lp" type="password" inputmode="numeric"><button class="btn" id="lb">فتح</button></div>';
+  $('#lb').onclick=async()=>{if(await sha($('#lp').value)===h){L.className='';L.innerHTML=''}else toast('كلمة السر غلط')};
+}
+let tx=0,ty=0;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+document.addEventListener('touchend',e=>{
+  if(document.querySelector('#lock.on')||e.target.closest('input,textarea'))return;
+  const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)<70||Math.abs(dx)<Math.abs(dy)*1.5)return;
+  const i=TABS.indexOf(curTab)+(dx<0?1:-1);
+  if(i>=0&&i<TABS.length)setTab(TABS[i]);
+},{passive:true});
+loadDate();buildToday();lockCheck();
+</script>
+</body>
+</html>
